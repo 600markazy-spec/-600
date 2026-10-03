@@ -143,6 +143,7 @@
     .logo-text h1 { color:#0a1628!important; font-size:16px!important; }
     .logo-text p { color:#555!important; }
     .header-stats { display:none!important; }
+    #logout-btn { display:none!important; }
 
     /* شعار في رأس كل صفحة مطبوعة */
     @page {
@@ -428,6 +429,7 @@
       <div class="stat-pill">🎖️ مجندين: <span id="hdr-recruits">0</span></div>
       <div class="stat-pill">🚗 مركبات: <span id="hdr-vehicles">0</span></div>
     </div>
+    <button id="logout-btn" class="btn btn-outline btn-sm" onclick="lgLogout()" title="تسجيل الخروج">🚪 تسجيل الخروج</button>
   </div>
   <nav class="nav-bar">
     <button class="nav-tab active" onclick="showSection('dashboard')">🏠 الرئيسية</button>
@@ -3802,6 +3804,25 @@ function lgDoLogin(){
     ov.style.opacity='0';
     setTimeout(function(){ov.classList.add('hide');},500);
   },800);
+}
+
+// ===== تسجيل الخروج =====
+function lgLogout(){
+  if(!confirm('هل تريد تسجيل الخروج؟')) return;
+  _safeSession.removeItem('lg_auth');
+  _safeSession.removeItem('lg_name');
+  _safeSession.removeItem('lg_role');
+  document.querySelectorAll('.modal-overlay.open').forEach(function(m){m.classList.remove('open');});
+  applyPermissions();
+  showSection('dashboard');
+  var ov=document.getElementById('login-overlay');
+  ov.style.transition='none'; ov.style.opacity='1'; ov.classList.remove('hide');
+  var u=document.getElementById('lg-user'),pw=document.getElementById('lg-pass'),eye=document.getElementById('lg-eye'),
+      btn=document.getElementById('lg-btn'),err=document.getElementById('lg-err');
+  u.value=''; pw.value=''; pw.type='password'; if(eye) eye.textContent='👁️';
+  btn.textContent='دخول ← إلى النظام'; btn.style.background=''; btn.style.color='';
+  err.className='lg-err';
+  setTimeout(function(){u.focus();},100);
 }
 
 // Enter للدخول
